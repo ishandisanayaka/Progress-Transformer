@@ -73,6 +73,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         storagePaths = StorageUtil.getStorageDirectories(this);
 
         for (String path : storagePaths) {
+
             storage = new File(path);
             Method.load_Directory_Files(storage);
         }
@@ -163,6 +164,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             // Do nothing. Because if permission is already granted then files will be accessed/loaded in splash_screen_activity
         }
     }
+
+
+
+
 
 
 }

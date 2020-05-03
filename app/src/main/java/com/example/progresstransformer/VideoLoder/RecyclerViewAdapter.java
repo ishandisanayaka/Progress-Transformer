@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,6 +32,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     private DBHelper dbHelper;
 
     public RecyclerViewAdapter(Context mContext,OnNoteListner onNoteListner2){
+
         this.mOnNoteListner=onNoteListner2;
         this.mContext = mContext;
     }
@@ -40,6 +42,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.files_list,parent,false);
 
+
         return new FileLayoutHolder(view,mOnNoteListner);
     }
 
@@ -48,6 +51,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         ((FileLayoutHolder)holder).videoTitle.setText(Constant.allMediaList.get(position).getName());
         //we will load thumbnail using glid library
         Uri uri = Uri.fromFile(Constant.allMediaList.get(position));
+
 
 
 

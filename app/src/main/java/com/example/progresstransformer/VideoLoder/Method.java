@@ -2,6 +2,8 @@
 package com.example.progresstransformer.VideoLoder;
 
 import android.net.Uri;
+import android.os.Environment;
+import android.util.Log;
 
 import com.example.progresstransformer.Database.DBHelper;
 import com.example.progresstransformer.MainActivity;
@@ -10,6 +12,7 @@ import java.io.File;
 
 public class Method {
     private static DBHelper dbHelper;
+    private static MainActivity mainActivity=new MainActivity();
 
     public static void load_Directory_Files(File directory){
         File[] fileList = directory.listFiles();
@@ -24,6 +27,7 @@ public class Method {
                         //check the type of file
                         if(name.endsWith(extension) && !Constant.allMediaList.contains(fileList[i])){
                             Constant.allMediaList.add(fileList[i]);
+
 
                             //when we found file
                             break;

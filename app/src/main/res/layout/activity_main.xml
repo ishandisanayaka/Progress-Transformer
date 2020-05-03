@@ -21,7 +21,7 @@
 
             android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-            app:title="Crowd Source"
+            app:title="Progress Transformer"
             android:elevation="4dp"/>
         <FrameLayout
             android:layout_width="match_parent"

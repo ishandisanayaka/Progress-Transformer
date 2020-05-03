@@ -6,6 +6,7 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -70,6 +71,7 @@ public class VideoFragment extends Fragment implements RecyclerViewAdapter.OnNot
         recyclerViewAdapter = new RecyclerViewAdapter(MainActivity.getContextOfApplication(),this);
 
         recyclerView.setAdapter(recyclerViewAdapter);
+
 //        Intent intent = new Intent(getActivity(), VideoPlayer.class);
 //        startActivity(intent);
         return mView;
@@ -91,6 +93,7 @@ public class VideoFragment extends Fragment implements RecyclerViewAdapter.OnNot
 
                 for (String path : storagePaths) {
                     storage = new File(path);
+                    //File file = new File(Environment.getExternalStorageDirectory(), path);
                     Method.load_Directory_Files(storage);
                 }
 
