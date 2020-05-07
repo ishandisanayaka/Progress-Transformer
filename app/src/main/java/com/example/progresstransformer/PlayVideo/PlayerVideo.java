@@ -39,9 +39,14 @@ public class PlayerVideo extends AppCompatActivity {
         Intent intent=getIntent();
         int positionOfArray=intent.getIntExtra("uri",0);
         urlOfVideo = Uri.fromFile(Constant.allMediaList.get(positionOfArray));
-        lastPosition=videoView.getCurrentPosition();
-        dbHelper.insertData(Constant.allMediaList.get(positionOfArray).getName(),String.valueOf(urlOfVideo),String.valueOf(lastPosition));
-        Constant.allSendToDB.add(String.valueOf(urlOfVideo));
+        if (!Constant.allSendToDB.contains(String.valueOf(urlOfVideo))) {
+            lastPosition = videoView.getCurrentPosition();
+            dbHelper.insertData(Constant.allMediaList.get(positionOfArray).getName(), String.valueOf(urlOfVideo), String.valueOf(lastPosition));
+            Constant.allSendToDB.add(String.valueOf(urlOfVideo));
+        }else{
+            ArrayList<HashMap<String, String>> progressAttay=dbHelper.getvideoData(String.valueOf(urlOfVideo));
+            lastPosition=Integer.parseInt(progressAttay.get(0).get("progress"));
+        }
 
 
         videoView.setVideoURI(urlOfVideo);
@@ -49,9 +54,9 @@ public class PlayerVideo extends AppCompatActivity {
         videoView.setMediaController(mediaController);
 
 
-        ArrayList<HashMap<String, String>> progressAttay=dbHelper.getvideoData(String.valueOf(urlOfVideo));
+        //ArrayList<HashMap<String, String>> progressAttay=dbHelper.getvideoData(String.valueOf(urlOfVideo));
 
-        videoView.seekTo(Integer.parseInt(progressAttay.get(0).get("progress")));
+        videoView.seekTo(lastPosition);
         //videoView.start();
 
 

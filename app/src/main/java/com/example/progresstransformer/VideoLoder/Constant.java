@@ -8,9 +8,13 @@ public class Constant {
             ".3gp",".mv2",".m4v",".webm",".mpeg1",".mpeg2",".mts",".ogm",
             ".bup", ".dv",".flv",".m1v",".m2ts",".mpeg4",".vlc",".3g2",
             ".avi",".mpeg",".mpg",".wmv",".asf"};
+    public static String pdfExtensions = ".pdf";
 
     //all loaded files will be here
     public static ArrayList<File> allMediaList = new ArrayList<>();
     public static ArrayList<String> allSendToDB = new ArrayList<>();
+
+    public static ArrayList<File> allpdfList = new ArrayList<>();
+    public static ArrayList<String> allpdfSendToDB = new ArrayList<>();
 
 }

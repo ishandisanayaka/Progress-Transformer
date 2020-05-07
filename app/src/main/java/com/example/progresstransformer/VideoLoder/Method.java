@@ -33,6 +33,9 @@ public class Method {
                             break;
                         }
                     }
+                    if (name.endsWith(Constant.pdfExtensions) && !Constant.allpdfList.contains(fileList[i])){
+                        Constant.allpdfList.add(fileList[i]);
+                    }
                 }
             }
         }
