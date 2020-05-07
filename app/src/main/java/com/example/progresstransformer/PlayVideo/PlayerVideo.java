@@ -39,10 +39,15 @@ public class PlayerVideo extends AppCompatActivity {
         Intent intent=getIntent();
         int positionOfArray=intent.getIntExtra("uri",0);
         urlOfVideo = Uri.fromFile(Constant.allMediaList.get(positionOfArray));
-        if (!Constant.allSendToDB.contains(String.valueOf(urlOfVideo))) {
+
+        ArrayList<HashMap<String, String>> progressAttay1=dbHelper.getvideoData(String.valueOf(urlOfVideo));
+        //int lastPosition1=Integer.parseInt(progressAttay1.get(0).get("name"));
+        //Log.e("aa", String.valueOf(progressAttay1.isEmpty()));
+
+        if (progressAttay1.isEmpty()) {
             lastPosition = videoView.getCurrentPosition();
             dbHelper.insertData(Constant.allMediaList.get(positionOfArray).getName(), String.valueOf(urlOfVideo), String.valueOf(lastPosition));
-            Constant.allSendToDB.add(String.valueOf(urlOfVideo));
+            //Constant.allSendToDB.add(String.valueOf(urlOfVideo));
         }else{
             ArrayList<HashMap<String, String>> progressAttay=dbHelper.getvideoData(String.valueOf(urlOfVideo));
             lastPosition=Integer.parseInt(progressAttay.get(0).get("progress"));

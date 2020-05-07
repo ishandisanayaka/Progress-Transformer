@@ -36,10 +36,13 @@ public class ViewPdf extends AppCompatActivity {
         int positionOfArray=intent.getIntExtra("uri",0);
         urlOfPdf = Uri.fromFile(Constant.allpdfList.get(positionOfArray));
         pdfView=(PDFView)findViewById(R.id.pdfView);
-        if (!Constant.allpdfSendToDB.contains(String.valueOf(urlOfPdf))) {
+
+        ArrayList<HashMap<String, String>> progressAttay2=dbHelper.getPdfData(String.valueOf(urlOfPdf));
+
+        if (progressAttay2.isEmpty()) {
             lastPage = pdfView.getCurrentPage();
             dbHelper.insertPdfData(Constant.allMediaList.get(positionOfArray).getName(), String.valueOf(urlOfPdf), String.valueOf(lastPage));
-            Constant.allpdfSendToDB.add(String.valueOf(urlOfPdf));
+            //Constant.allpdfSendToDB.add(String.valueOf(urlOfPdf));
         }else{
             ArrayList<HashMap<String, String>> progressAttay=dbHelper.getPdfData(String.valueOf(urlOfPdf));
             lastPage=Integer.parseInt(progressAttay.get(0).get("progress"));
