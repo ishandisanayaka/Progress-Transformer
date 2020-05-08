@@ -25,7 +25,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ViewPdf.ViewPdf"></activity>
+        <activity android:name=".AudioPlayer.AudioPlayer"></activity>
+        <activity android:name=".ViewPdf.ViewPdf" />
         <activity android:name=".SendVideo.SendVideo" />
         <activity android:name=".SendVideo.SendVideoToAnotherDevice" />
         <activity android:name=".PlayVideo.PlayerVideo" /> <!-- <activity android:name=".MainActivity" -->

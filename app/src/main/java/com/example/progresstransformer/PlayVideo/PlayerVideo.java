@@ -36,6 +36,7 @@ public class PlayerVideo extends AppCompatActivity {
         setContentView(R.layout.activity_player_video);
         videoView=(VideoView)findViewById(R.id.videoView);
         mediaController=new MediaController(this);
+
         Intent intent=getIntent();
         int positionOfArray=intent.getIntExtra("uri",0);
         urlOfVideo = Uri.fromFile(Constant.allMediaList.get(positionOfArray));

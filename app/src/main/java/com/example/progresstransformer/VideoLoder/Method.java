@@ -33,6 +33,16 @@ public class Method {
                             break;
                         }
                     }
+                    for (String extension: Constant.audioExtensions){
+                        //check the type of file
+                        if(name.endsWith(extension) && !Constant.allaudioList.contains(fileList[i])){
+                            Constant.allaudioList.add(fileList[i]);
+
+
+                            //when we found file
+                            break;
+                        }
+                    }
                     if (name.endsWith(Constant.pdfExtensions) && !Constant.allpdfList.contains(fileList[i])){
                         Constant.allpdfList.add(fileList[i]);
                     }

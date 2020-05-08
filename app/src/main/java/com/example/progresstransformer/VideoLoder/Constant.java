@@ -10,11 +10,13 @@ public class Constant {
             ".avi",".mpeg",".mpg",".wmv",".asf"};
     public static String pdfExtensions = ".pdf";
 
+    public static String[] audioExtensions = {".mp3",".wav"};
+
     //all loaded files will be here
     public static ArrayList<File> allMediaList = new ArrayList<>();
-    public static ArrayList<String> allSendToDB = new ArrayList<>();
 
     public static ArrayList<File> allpdfList = new ArrayList<>();
-    public static ArrayList<String> allpdfSendToDB = new ArrayList<>();
+
+    public static ArrayList<File> allaudioList = new ArrayList<>();
 
 }
