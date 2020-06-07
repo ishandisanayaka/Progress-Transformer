@@ -1,8 +1,10 @@
 package com.example.progresstransformer.AudioPlayer;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.media.MediaPlayer;
@@ -58,18 +60,178 @@ public class AudioPlayer extends AppCompatActivity{
         //int lastPosition1=Integer.parseInt(progressAttay1.get(0).get("name"));
         //Log.e("aa", String.valueOf(progressAttay1.isEmpty()));
 
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Start the audio at the begining?");
+        builder.setCancelable(false);
+
+
         if (progressAttay1.isEmpty()) {
             lastPosition = 0;
             dbHelper.insertAudioData(Constant.allMediaList.get(position).getName(), String.valueOf(urlOfAudio), String.valueOf(lastPosition));
             //Constant.allSendToDB.add(String.valueOf(urlOfVideo));
         }else{
-            ArrayList<HashMap<String, String>> progressAttay=dbHelper.getAudioData(String.valueOf(urlOfAudio));
-            lastPosition=Integer.parseInt(progressAttay.get(0).get("progress"));
-        }
+//            ArrayList<HashMap<String, String>> progressAttay=dbHelper.getAudioData(String.valueOf(urlOfAudio));
+//            lastPosition=Integer.parseInt(progressAttay.get(0).get("progress"));
+            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    lastPosition = 0;
+                    String urlOfVideoString=String.valueOf(urlOfAudio);
+                    dbHelper.updateAudioProgress(String.valueOf(lastPosition),urlOfVideoString);
+                    playAudio();
 
-       // getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-      //  getSupportActionBar().setDisplayShowHomeEnabled(true);
-      //  getSupportActionBar().setTitle("Now Playing");
+                }
+            });
+            builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    ArrayList<HashMap<String, String>> progressAttay=dbHelper.getAudioData(String.valueOf(urlOfAudio));
+                    lastPosition=Integer.parseInt(progressAttay.get(0).get("progress"));
+                    playAudio();
+                    dialog.cancel();
+                }
+            });
+            builder.show();
+        }
+        playAudio();
+//
+//       // getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+//      //  getSupportActionBar().setDisplayShowHomeEnabled(true);
+//      //  getSupportActionBar().setTitle("Now Playing");
+//
+//        pause = (Button)findViewById(R.id.pause);
+//
+//        previous = (Button)findViewById(R.id.previous);
+//        next = (Button)findViewById(R.id.next);
+//
+//        sb=(SeekBar)findViewById(R.id.seekBar);
+//
+//
+//        updateSeekBar=new Thread(){
+//            @Override
+//            public void run(){
+//                int totalDuration = mp.getDuration();
+//                //int currentPosition = 0;
+//                while(lastPosition < totalDuration && !isPause){
+//                    try{
+//                        sleep(500);
+//                        lastPosition=mp.getCurrentPosition();
+//                        sb.setProgress(lastPosition);
+//                        //dbHelper.updateProgress(String.valueOf(lastPosition), String.valueOf(currentPosition));
+//                    }
+//                    catch (InterruptedException e){
+//
+//                    }
+//                }
+//            }
+//        };
+//
+//
+//
+//
+//        if(mp != null){
+//            mp.stop();
+//            mp.release();
+//        }
+//        //Intent i = getIntent();
+//        //Bundle b = i.getExtras();
+//
+//
+//        //mySongs = (ArrayList) b.getParcelableArrayList("songs");
+//
+//        sname = Constant.allaudioList.get(position).getName();
+//
+//        //String SongName = i.getStringExtra("songname");
+//       // songNameText.setText(SongName);
+//        songNameText.setSelected(true);
+//
+//       // position = b.getInt("pos",0);
+//        Uri u = urlOfAudio;
+//
+//        mp = MediaPlayer.create(getApplicationContext(),u);
+//        mp.seekTo(lastPosition);
+//        //mp.start();
+//        sb.setMax(mp.getDuration());
+//        updateSeekBar.start();
+//        sb.getProgressDrawable().setColorFilter(getResources().getColor(R.color.colorPrimary), PorterDuff.Mode.MULTIPLY);
+//        sb.getThumb().setColorFilter(getResources().getColor(R.color.colorPrimary), PorterDuff.Mode.SRC_IN);
+//
+//
+//        sb.setOnSeekBarChangeListener(new
+//                                              SeekBar.OnSeekBarChangeListener() {
+//                                                  @Override
+//                                                  public void onProgressChanged(SeekBar seekBar, int i,
+//                                                                                boolean b) {
+//                                                  }
+//                                                  @Override
+//                                                  public void onStartTrackingTouch(SeekBar seekBar) {
+//                                                  }
+//                                                  @Override
+//                                                  public void onStopTrackingTouch(SeekBar seekBar) {
+//                                                      mp.seekTo(seekBar.getProgress());
+//
+//                                                  }
+//                                              });
+//        pause.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                sb.setMax(mp.getDuration());
+//                if(mp.isPlaying()){
+//                    pause.setBackgroundResource(R.drawable.ic_play_arrow_black_24dp);
+//                    mp.pause();
+//                    isPause=true;
+//
+//                }
+//                else {
+//                    pause.setBackgroundResource(R.drawable.pause);
+//                    mp.start();
+//                    isPause=false;
+//                }
+//            }
+//        });
+//
+////        next.setOnClickListener(new View.OnClickListener() {
+////            @Override
+////            public void onClick(View v) {
+////                mp.stop();
+////                mp.release();
+////                position=((position+1)%Constant.allaudioList.size());
+////                Uri u = Uri.fromFile(Constant.allaudioList.get(position));
+////                // songNameText.setText(getSongName);
+////                mp = MediaPlayer.create(getApplicationContext(),u);
+////
+////                sname = Constant.allaudioList.get(position).getName().toString();
+////                songNameText.setText(sname);
+////
+////                try{
+////                    mp.start();
+////                }catch(Exception e){}
+////
+////            }
+////        });
+////        previous.setOnClickListener(new View.OnClickListener() {
+////            @Override
+////            public void onClick(View v) {
+////                //songNameText.setText(getSongName);
+////                mp.stop();
+////                mp.release();
+////
+////                position=((position-1)<0)?(Constant.allaudioList.size()-1):(position-1);
+////                Uri u = Uri.fromFile(Constant.allaudioList.get(position));
+////                mp = MediaPlayer.create(getApplicationContext(),u);
+////                sname = Constant.allaudioList.get(position).getName().toString();
+////                songNameText.setText(sname);
+////                mp.start();
+////            }
+////        });
+//
+
+    }
+    private void playAudio(){
+
+        // getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        //  getSupportActionBar().setDisplayShowHomeEnabled(true);
+        //  getSupportActionBar().setTitle("Now Playing");
 
         pause = (Button)findViewById(R.id.pause);
 
@@ -114,10 +276,10 @@ public class AudioPlayer extends AppCompatActivity{
         sname = Constant.allaudioList.get(position).getName();
 
         //String SongName = i.getStringExtra("songname");
-       // songNameText.setText(SongName);
+        // songNameText.setText(SongName);
         songNameText.setSelected(true);
 
-       // position = b.getInt("pos",0);
+        // position = b.getInt("pos",0);
         Uri u = urlOfAudio;
 
         mp = MediaPlayer.create(getApplicationContext(),u);
@@ -222,6 +384,7 @@ public class AudioPlayer extends AppCompatActivity{
         lastPosition=mp.getCurrentPosition();
         String urlOfVideoString=String.valueOf(urlOfAudio);
         dbHelper.updateAudioProgress(String.valueOf(lastPosition),urlOfVideoString);
+        isPause=false;
 
 
 

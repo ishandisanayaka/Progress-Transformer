@@ -1,7 +1,9 @@
 package com.example.progresstransformer.PlayVideo;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -25,7 +27,7 @@ public class PlayerVideo extends AppCompatActivity {
     MediaController mediaController;
     private  DBHelper dbHelper;
     private Uri urlOfVideo;
-    private int lastPosition;
+    public int lastPosition;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,24 +47,57 @@ public class PlayerVideo extends AppCompatActivity {
         //int lastPosition1=Integer.parseInt(progressAttay1.get(0).get("name"));
         //Log.e("aa", String.valueOf(progressAttay1.isEmpty()));
 
-        if (progressAttay1.isEmpty()) {
-            lastPosition = videoView.getCurrentPosition();
-            dbHelper.insertData(Constant.allMediaList.get(positionOfArray).getName(), String.valueOf(urlOfVideo), String.valueOf(lastPosition));
-            //Constant.allSendToDB.add(String.valueOf(urlOfVideo));
-        }else{
-            ArrayList<HashMap<String, String>> progressAttay=dbHelper.getvideoData(String.valueOf(urlOfVideo));
-            lastPosition=Integer.parseInt(progressAttay.get(0).get("progress"));
-        }
-
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Start the video at the begining?");
+        builder.setCancelable(false);
 
         videoView.setVideoURI(urlOfVideo);
         mediaController.setAnchorView(videoView);
         videoView.setMediaController(mediaController);
 
+        if (progressAttay1.isEmpty()) {
+            lastPosition = videoView.getCurrentPosition();
+            dbHelper.insertData(Constant.allMediaList.get(positionOfArray).getName(), String.valueOf(urlOfVideo), String.valueOf(lastPosition));
+            videoView.seekTo(lastPosition);
+            videoView.start();
+            //Constant.allSendToDB.add(String.valueOf(urlOfVideo));
+        }else{
+            // Set up the buttons
+            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    lastPosition = videoView.getCurrentPosition();
+                    String urlOfVideoString=String.valueOf(urlOfVideo);
+                    dbHelper.updateProgress(String.valueOf(lastPosition),urlOfVideoString);
+                    videoView.seekTo(lastPosition);
+                    videoView.start();
+
+                }
+            });
+            builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    ArrayList<HashMap<String, String>> progressAttay=dbHelper.getvideoData(String.valueOf(urlOfVideo));
+                    lastPosition=Integer.parseInt(progressAttay.get(0).get("progress"));
+                    videoView.seekTo(lastPosition);
+                    videoView.start();
+                    dialog.cancel();
+                }
+            });
+            builder.show();
+//            ArrayList<HashMap<String, String>> progressAttay=dbHelper.getvideoData(String.valueOf(urlOfVideo));
+//            lastPosition=Integer.parseInt(progressAttay.get(0).get("progress"));
+        }
+
+
+//        videoView.setVideoURI(urlOfVideo);
+//        mediaController.setAnchorView(videoView);
+//        videoView.setMediaController(mediaController);
+
 
         //ArrayList<HashMap<String, String>> progressAttay=dbHelper.getvideoData(String.valueOf(urlOfVideo));
 
-        videoView.seekTo(lastPosition);
+//        videoView.seekTo(lastPosition);
         //videoView.start();
 
 

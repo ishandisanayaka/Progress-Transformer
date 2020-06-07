@@ -1,7 +1,9 @@
 package com.example.progresstransformer.ViewPdf;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Canvas;
 import android.net.Uri;
@@ -37,6 +39,10 @@ public class ViewPdf extends AppCompatActivity {
         urlOfPdf = Uri.fromFile(Constant.allpdfList.get(positionOfArray));
         pdfView=(PDFView)findViewById(R.id.pdfView);
 
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Start the pdf at the begining?");
+        builder.setCancelable(false);
+
         ArrayList<HashMap<String, String>> progressAttay2=dbHelper.getPdfData(String.valueOf(urlOfPdf));
 
         if (progressAttay2.isEmpty()) {
@@ -44,19 +50,60 @@ public class ViewPdf extends AppCompatActivity {
             dbHelper.insertPdfData(Constant.allMediaList.get(positionOfArray).getName(), String.valueOf(urlOfPdf), String.valueOf(lastPage));
             //Constant.allpdfSendToDB.add(String.valueOf(urlOfPdf));
         }else{
-            ArrayList<HashMap<String, String>> progressAttay=dbHelper.getPdfData(String.valueOf(urlOfPdf));
-            lastPage=Integer.parseInt(progressAttay.get(0).get("progress"));
+//            ArrayList<HashMap<String, String>> progressAttay=dbHelper.getPdfData(String.valueOf(urlOfPdf));
+//            lastPage=Integer.parseInt(progressAttay.get(0).get("progress"));
+            // Set up the buttons
+            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    lastPage = pdfView.getCurrentPage();
+                    dbHelper.updatePdfPageNumber(String.valueOf(pdfView.getCurrentPage()), String.valueOf(urlOfPdf));
+                    viewPdf();
+
+                }
+            });
+            builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    ArrayList<HashMap<String, String>> progressAttay=dbHelper.getPdfData(String.valueOf(urlOfPdf));
+                    lastPage=Integer.parseInt(progressAttay.get(0).get("progress"));
+                    viewPdf();
+                    dialog.cancel();
+                }
+            });
+            builder.show();
         }
+//        viewPdf();
+//        pdfView.fromUri(urlOfPdf)
+//                .defaultPage(lastPage)
+//                .enableSwipe(true)
+//        .swipeHorizontal(false)
+//        .onDraw(new OnDrawListener() {
+//            @Override
+//            public void onLayerDrawn(Canvas canvas, float pageWidth, float pageHeight, int displayedPage) {
+//
+//            }
+//        }).onPageChange(new OnPageChangeListener() {
+//            @Override
+//            public void onPageChanged(int page, int pageCount) {
+//
+//                dbHelper.updatePdfPageNumber(String.valueOf(pdfView.getCurrentPage()), String.valueOf(urlOfPdf));
+//
+//            }
+//        }).enableAnnotationRendering(true)
+//        .load();
+    }
+    private void viewPdf(){
         pdfView.fromUri(urlOfPdf)
                 .defaultPage(lastPage)
                 .enableSwipe(true)
-        .swipeHorizontal(false)
-        .onDraw(new OnDrawListener() {
-            @Override
-            public void onLayerDrawn(Canvas canvas, float pageWidth, float pageHeight, int displayedPage) {
+                .swipeHorizontal(false)
+                .onDraw(new OnDrawListener() {
+                    @Override
+                    public void onLayerDrawn(Canvas canvas, float pageWidth, float pageHeight, int displayedPage) {
 
-            }
-        }).onPageChange(new OnPageChangeListener() {
+                    }
+                }).onPageChange(new OnPageChangeListener() {
             @Override
             public void onPageChanged(int page, int pageCount) {
 
@@ -64,6 +111,6 @@ public class ViewPdf extends AppCompatActivity {
 
             }
         }).enableAnnotationRendering(true)
-        .load();
+                .load();
     }
 }
